@@ -1,0 +1,100 @@
+1. archive(1) on desktop. Move it to datasets folder in baseline model. Check the shape of innitial image in main.py line 90. run python main.py --training. 
+change dataset name. --done
+
+(used FER2013 dataset containing  approximately 30,000 facial RGB images of different expressions with size restricted to 48×48, and the
+ main labels of it can be divided into 7 types: 0=Angry, 1=Disgust, 2=Fear, 3=Happy, 4=Sad, 5=Surprise, 6=Neutral. cited here https://arxiv.org/abs/1910.06044)
+
+3. output for baseline LBP Model of all classes(FER2013):
+    (base) pangwenjing@pangwenjingdeMacBook-Pro Computer-Vision-Project % python main.py --training
+    /Users/pangwenjing/Desktop/capstone/untitled folder/Computer-Vision-Project/datasets/
+    Launching LBP on the FER2013 dataset...
+    Processing images: 100%|████████████████████████████████████████████████████████████████████████████████████████| 27312/27312 [07:49<00:00, 58.20it/s]
+    --- LBP done in 469.32006001472473 seconds ---
+    Split dataset into training and test set [0.77] [0.33]
+    Launching SVM...
+    Start training...
+    /Users/pangwenjing/opt/anaconda3/lib/python3.9/site-packages/sklearn/svm/_classes.py:32: FutureWarning: The default value of `dual` will change from `True` to `'auto'` in 1.5. Set the value of `dual` explicitly to suppress the warning.
+    warnings.warn(
+    /Users/pangwenjing/opt/anaconda3/lib/python3.9/site-packages/sklearn/svm/_base.py:1250: ConvergenceWarning: Liblinear failed to converge, increase the number of iterations.
+    warnings.warn(
+    --- Training done in 261.81551909446716 seconds ---
+    Start testing...
+    --- SVM done in 261.91123509407043 seconds ---
+    Accuracy: 0.3418395650726728
+
+4. show the result of LBP histogram model 
+    (used YalesFacesB database, description: Extended Yale B Faces Dataset includes 2414 frontal pictures of faces belonging to 38 different subjects. For each subject there are 64 photos taken in different light conditions.) on github. 
+result: 
+    Classifier	Accuracy without histogram equalization	Accuracy with histogram equalization	Accuracy with Normalization Illumination
+    LinearSVM	0.94	0.95	0.99
+    KNN	0.81	0.81	0.97
+    NaiveBayes	0.82	0.83	0.96
+And then the result with FER2013 dataset(I implemented)
+    , which is the output for baseline LBP Model of all classes(FER2013). I used svm only for now. Let me knwo if i should test the others. 
+Try to show the effect of low resolution -> how low resolution reduce the accuracy.
+
+5. check for class imbalances: -> there are indeed class imbalances.
+    dict_items([('happy', 7215), ('sad', 4830), ('neutral', 4965), ('angry', 3995), ('disgust', 436), ('fear', 4097), ('surprise', 1774)])
+
+6. output of baseline LBP Model after balancing classes using SMOTE:
+    (base) pangwenjing@pangwenjingdeMacBook-Pro Computer-Vision-Project % python main.py --training
+    /Users/pangwenjing/Desktop/capstone/untitled folder/Computer-Vision-Project/datasets/
+    dict_items([('happy', 7215), ('sad', 4830), ('neutral', 4965), ('angry', 3995), ('disgust', 436), ('fear', 4097), ('surprise', 1774)])
+    Launching LBP on the FER2013 dataset...
+    Processing images: 100%|████████████████████████████████████████████████████████████████████████████████████████| 27312/27312 [08:03<00:00, 56.48it/s]
+    --- LBP done in 483.62255787849426 seconds ---
+    Split dataset into training and test set [0.77] [0.33]
+    Balancing the training data using SMOTE...
+    Number of samples per class after SMOTE: Counter({'happy': 4844, 'neutral': 4844, 'surprise': 4844, 'fear': 4844, 'angry': 4844, 'sad': 4844, 'disgust': 4844})
+    Launching SVM...
+    Start training...
+    /Users/pangwenjing/opt/anaconda3/lib/python3.9/site-packages/sklearn/svm/_classes.py:32: FutureWarning: The default value of `dual` will change from `True` to `'auto'` in 1.5. Set the value of `dual` explicitly to suppress the warning.
+    warnings.warn(
+    /Users/pangwenjing/opt/anaconda3/lib/python3.9/site-packages/sklearn/svm/_base.py:1250: ConvergenceWarning: Liblinear failed to converge, increase the number of iterations.
+    warnings.warn(
+    --- Training done in 525.6237738132477 seconds ---
+    Start testing...
+    --- SVM done in 526.0328981876373 seconds ---
+    Accuracy: 0.3165427715522024
+
+7. 参考github写paper。especially 图 how should i cite the image from github?
+
+8. start by conda activate newenv for the Hess_ACS_LBP, CHECK右上角 environment name
+
+9. Hess_ACS_LBP model used dataset of celeb-data and the accuracy is:
+    The mean of f1-scores is :  0.9773016
+    The standard deviation of f1-scores is :  0.04539683
+
+Hess_ACS_LBP is for Face recognition. slightly difference from the facial expression recognition i am trying to do. But I could check the 
+feature extraction part of that model to see how can i modify it.
+
+10. check feature extraction -> preprocess img -> rects
+
+11.detailed explanation see chatgpt
+
+12. apply on 800 images directly: The mean of f1-scores is :  0.33683413
+The standard deviation of f1-scores is :  0.03658719
+
+13. first adjust the model by lower parameters from recognizer = cv2.face.LBPHFaceRecognizer_create(
+        radius = 2 , neighbors = 16 , grid_x = 9 , grid_y  = 9) to radius = 1, neighbors = 4, grid_x = 5 , grid_y  = 5)
+
+14. instead of detect face, can i detect like month, eyebrows? rotation detection?
+
+15. tried the measure above, basically build from scratch. get weird result:
+
+solution: try to search on google check class imbalance in final dataloader->not very severe. check which step losses data->no datalose. check logic error.
+precision    recall  f1-score   support
+
+       angry       0.00      0.00      0.00       672
+     disgust       0.00      0.00      0.00        80
+        fear       0.00      0.00      0.00       651
+       happy       0.29      1.00      0.44      1367
+     neutral       0.00      0.00      0.00       971
+         sad       0.00      0.00      0.00       642
+    surprise       0.00      0.00      0.00       403
+
+    accuracy                           0.29      4786
+   macro avg       0.04      0.14      0.06      4786
+weighted avg       0.08      0.29      0.13      4786
+
+also solution: try svm only. delete happy class.

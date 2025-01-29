@@ -1,0 +1,7 @@
+*.pgm
+*.pyc
+*.pkl
+*.jar
+
+/Matlab
+/datasets
