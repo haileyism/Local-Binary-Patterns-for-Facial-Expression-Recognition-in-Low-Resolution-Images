@@ -41,8 +41,6 @@ Preliminary results demonstrate the effectiveness of the **PixelPercept SVM Arch
 
 For an in-depth understanding of the methodology, experimental results, and discussions, please refer to the complete capstone report:  
 
-📄 **[Leveraging Local Binary Patterns for Enhanced Facial Expression Recognition in Low-Resolution Images]([https://example.com/your-full-report-link](https://drive.google.com/file/d/1sYtYTfOe14r_vdODTS4ih0YrDsIljprZ/view?usp=sharing))**  
+📄 **[Leveraging Local Binary Patterns for Enhanced Facial Expression Recognition in Low-Resolution Images](https://drive.google.com/file/d/1sYtYTfOe14r_vdODTS4ih0YrDsIljprZ/view?usp=sharing)** 
 
 ---
-
-*Note: Replace the placeholder link with the actual URL to your full report.*
